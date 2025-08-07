@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Learning Games</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 English Learning Games</h1>
+            <p>Master English vocabulary and grammar through interactive games</p>
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+                <button class="stats-btn" onclick="showStats()" title="View your progress">📊</button>
+                <button class="settings-btn" onclick="showSettings()" title="Settings">⚙️</button>
+            </div>
+        </div>
+
+        <div id="menu" class="game-selection">
+            <div class="difficulty-selector">
+                <h3>Choose Difficulty Level</h3>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn active" data-level="beginner" onclick="setDifficulty('beginner')">
+                        🌱 Beginner
+                    </button>
+                    <button class="difficulty-btn" data-level="intermediate" onclick="setDifficulty('intermediate')">
+                        🌿 Intermediate
+                    </button>
+                    <button class="difficulty-btn" data-level="advanced" onclick="setDifficulty('advanced')">
+                        🌳 Advanced
+                    </button>
+                </div>
+            </div>
+            
+            <div class="user-progress">
+                <div class="progress-item">
+                    <span>🏆 Total Score: <span id="total-score">0</span></span>
+                </div>
+                <div class="progress-item">
+                    <span>🔥 Current Streak: <span id="current-streak">0</span></span>
+                </div>
+                <div class="progress-item">
+                    <span>⭐ Level: <span id="user-level">1</span></span>
+                </div>
+            </div>
+
+            <div class="games-grid">
+                <div class="game-card" onclick="startGame('synonyms')">
+                    <div class="game-icon">🔍</div>
+                    <h3>Synonym Hunter</h3>
+                    <p>Find words with similar meanings and expand your vocabulary</p>
+                    <div class="game-stats">
+                        <span>Best: <span class="best-score" id="syn-best">0</span></span>
+                        <span>Played: <span class="times-played" id="syn-played">0</span></span>
+                    </div>
+                </div>
+                <div class="game-card" onclick="startGame('guess-word')">
+                    <div class="game-icon">🎯</div>
+                    <h3>Word Guesser</h3>
+                    <p>Guess words based on definitions and clues</p>
+                    <div class="game-stats">
+                        <span>Best: <span class="best-score" id="guess-best">0</span></span>
+                        <span>Played: <span class="times-played" id="guess-played">0</span></span>
+                    </div>
+                </div>
+                <div class="game-card" onclick="startGame('fill-blanks')">
+                    <div class="game-icon">📝</div>
+                    <h3>Fill the Blanks</h3>
+                    <p>Complete sentences with the correct words</p>
+                    <div class="game-stats">
+                        <span>Best: <span class="best-score" id="blank-best">0</span></span>
+                        <span>Played: <span class="times-played" id="blank-played">0</span></span>
+                    </div>
+                </div>
+                <div class="game-card" onclick="startGame('antonyms')">
+                    <div class="game-icon">⚖️</div>
+                    <h3>Opposite Match</h3>
+                    <p>Match words with their opposite meanings</p>
+                    <div class="game-stats">
+                        <span>Best: <span class="best-score" id="ant-best">0</span></span>
+                        <span>Played: <span class="times-played" id="ant-played">0</span></span>
+                    </div>
+                </div>
+                <div class="game-card" onclick="startGame('word-formation')">
+                    <div class="game-icon">🔧</div>
+                    <h3>Word Builder</h3>
+                    <p>Create words using prefixes and suffixes</p>
+                    <div class="game-stats">
+                        <span>Best: <span class="best-score" id="form-best">0</span></span>
+                        <span>Played: <span class="times-played" id="form-played">0</span></span>
+                    </div>
+                </div>
+                <div class="game-card" onclick="startGame('phrase-match')">
+                    <div class="game-icon">🧩</div>
+                    <h3>Phrase Puzzle</h3>
+                    <p>Complete common English phrases and idioms</p>
+                    <div class="game-stats">
+                        <span>Best: <span class="best-score" id="phrase-best">0</span></span>
+                        <span>Played: <span class="times-played" id="phrase-played">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Synonym Hunter Game -->
+        <div id="synonyms" class="game-area">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+                <div class="game-info">
+                    <div class="lives-container">
+                        <span>Lives: </span>
+                        <div class="hearts" id="syn-hearts">
+                            <span class="heart">❤️</span>
+                            <span class="heart">❤️</span>
+                            <span class="heart">❤️</span>
+                        </div>
+                    </div>
+                    <div class="hints-container">
+                        <button class="hint-btn" onclick="useHint('synonyms')" id="syn-hint-btn">
+                            💡 Hint (<span id="syn-hints">3</span>)
+                        </button>
+                    </div>
+                </div>
+                <div class="score-board">
+                    <span>Score: <span id="syn-score">0</span></span>
+                    <span>Streak: <span id="syn-streak">0</span></span>
+                    <span>Question: <span id="syn-current">1</span>/<span id="syn-total">10</span></span>
+                    <span class="timer">Time: <span id="syn-timer">30</span>s</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="syn-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-area">
+                <div class="question">Find the synonym for: <strong id="syn-word"></strong>
+                    <button class="pronounce-btn" onclick="pronounceWord('syn-word')" title="Pronounce word">🔊</button>
+                </div>
+                <div class="word-definition" id="syn-definition"></div>
+                <div class="hint-text" id="syn-hint-text" style="display: none;"></div>
+                <div class="options" id="syn-options"></div>
+                <div class="feedback" id="syn-feedback"></div>
+                <button class="next-btn" id="syn-next" onclick="nextSynonym()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Word Guesser Game -->
+        <div id="guess-word" class="game-area">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+                <div class="score-board">
+                    <span>Score: <span id="guess-score">0</span></span>
+                    <span>Question: <span id="guess-current">1</span>/<span id="guess-total">10</span></span>
+                    <span class="timer">Time: <span id="guess-timer">30</span>s</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="guess-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-area">
+                <div class="question">What word matches this definition?</div>
+                <div class="word-definition" id="guess-definition"></div>
+                <div class="input-area">
+                    <input type="text" class="word-input" id="guess-input" placeholder="Enter your guess...">
+                    <button class="submit-btn" onclick="checkGuess()">Submit</button>
+                </div>
+                <div class="feedback" id="guess-feedback"></div>
+                <button class="next-btn" id="guess-next" onclick="nextGuess()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Fill the Blanks Game -->
+        <div id="fill-blanks" class="game-area">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+                <div class="score-board">
+                    <span>Score: <span id="blank-score">0</span></span>
+                    <span>Question: <span id="blank-current">1</span>/<span id="blank-total">10</span></span>
+                    <span class="timer">Time: <span id="blank-timer">30</span>s</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="blank-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-area">
+                <div class="question">Complete the sentence:</div>
+                <div class="sentence-area" id="blank-sentence"></div>
+                <div class="options" id="blank-options"></div>
+                <div class="feedback" id="blank-feedback"></div>
+                <button class="next-btn" id="blank-next" onclick="nextBlank()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Antonyms Game -->
+        <div id="antonyms" class="game-area">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+                <div class="score-board">
+                    <span>Score: <span id="ant-score">0</span></span>
+                    <span>Question: <span id="ant-current">1</span>/<span id="ant-total">10</span></span>
+                    <span class="timer">Time: <span id="ant-timer">30</span>s</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="ant-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-area">
+                <div class="question">Find the antonym (opposite) for: <strong id="ant-word"></strong></div>
+                <div class="word-definition" id="ant-definition"></div>
+                <div class="options" id="ant-options"></div>
+                <div class="feedback" id="ant-feedback"></div>
+                <button class="next-btn" id="ant-next" onclick="nextAntonym()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Word Formation Game -->
+        <div id="word-formation" class="game-area">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+                <div class="score-board">
+                    <span>Score: <span id="form-score">0</span></span>
+                    <span>Question: <span id="form-current">1</span>/<span id="form-total">10</span></span>
+                    <span class="timer">Time: <span id="form-timer">30</span>s</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="form-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-area">
+                <div class="question" id="form-question"></div>
+                <div class="word-definition" id="form-hint"></div>
+                <div class="input-area">
+                    <input type="text" class="word-input" id="form-input" placeholder="Enter the word...">
+                    <button class="submit-btn" onclick="checkFormation()">Submit</button>
+                </div>
+                <div class="feedback" id="form-feedback"></div>
+                <button class="next-btn" id="form-next" onclick="nextFormation()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Phrase Match Game -->
+        <div id="phrase-match" class="game-area">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+                <div class="score-board">
+                    <span>Score: <span id="phrase-score">0</span></span>
+                    <span>Question: <span id="phrase-current">1</span>/<span id="phrase-total">10</span></span>
+                    <span class="timer">Time: <span id="phrase-timer">30</span>s</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="phrase-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-area">
+                <div class="question">Complete the phrase or idiom:</div>
+                <div class="sentence-area" id="phrase-sentence"></div>
+                <div class="options" id="phrase-options"></div>
+                <div class="feedback" id="phrase-feedback"></div>
+                <button class="next-btn" id="phrase-next" onclick="nextPhrase()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div id="stats-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('stats-modal')">&times;</span>
+            <h2>📊 Your Learning Progress</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>🏆 Total Score</h3>
+                    <p id="stats-total-score">0</p>
+                </div>
+                <div class="stat-item">
+                    <h3>🎮 Games Played</h3>
+                    <p id="stats-games-played">0</p>
+                </div>
+                <div class="stat-item">
+                    <h3>🔥 Best Streak</h3>
+                    <p id="stats-best-streak">0</p>
+                </div>
+                <div class="stat-item">
+                    <h3>⭐ Current Level</h3>
+                    <p id="stats-current-level">1</p>
+                </div>
+                <div class="stat-item">
+                    <h3>📈 Accuracy</h3>
+                    <p id="stats-accuracy">0%</p>
+                </div>
+                <div class="stat-item">
+                    <h3>⏱️ Average Time</h3>
+                    <p id="stats-avg-time">0s</p>
+                </div>
+            </div>
+            <div class="achievements">
+                <h3>🏅 Achievements</h3>
+                <div id="achievements-list" class="achievements-grid">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('settings-modal')">&times;</span>
+            <h2>⚙️ Settings</h2>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="sound-toggle">🔊 Sound Effects</label>
+                    <input type="checkbox" id="sound-toggle" checked onchange="toggleSound()">
+                </div>
+                <div class="setting-item">
+                    <label for="auto-pronounce">🗣️ Auto Pronounce</label>
+                    <input type="checkbox" id="auto-pronounce" onchange="toggleAutoPronounce()">
+                </div>
+                <div class="setting-item">
+                    <button class="reset-btn" onclick="resetProgress()">🔄 Reset All Progress</button>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="custom-vocabularies-toggle" onchange="toggleCustomVocabularies()">
+                    Use Custom Vocabularies
+                </label>
+                <p class="setting-description">Enable to use your own vocabulary sets instead of default ones</p>
+            </div>
+
+            <div class="setting-group">
+                <h3>Manage Vocabularies</h3>
+                <div class="vocab-buttons">
+                    <button onclick="showVocabularyManager('synonyms')" class="vocab-manage-btn">📚 Synonyms</button>
+                    <button onclick="showVocabularyManager('guessWords')" class="vocab-manage-btn">🔍 Guess Words</button>
+                    <button onclick="showVocabularyManager('fillBlanks')" class="vocab-manage-btn">📝 Fill Blanks</button>
+                    <button onclick="showVocabularyManager('antonyms')" class="vocab-manage-btn">🔄 Antonyms</button>
+                    <button onclick="showVocabularyManager('wordFormation')" class="vocab-manage-btn">🏗️ Word Formation</button>
+                    <button onclick="showVocabularyManager('phraseMatch')" class="vocab-manage-btn">💭 Phrase Match</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <h3>Game Settings</h3>
+                
+                <div class="setting-range">
+                    <label>Questions per Game:</label>
+                    <div class="range-container">
+                        <input type="range" id="questions-per-game" min="5" max="50" value="10" 
+                               onchange="setQuestionsPerGame()" oninput="document.getElementById('questions-value').textContent = this.value">
+                        <span class="range-value" id="questions-value">10</span>
+                    </div>
+                </div>
+                
+                <div class="setting-input-group">
+                    <label>Timer Duration:</label>
+                    <select id="timer-duration" onchange="setTimerDuration()">
+                        <option value="15">15s</option>
+                        <option value="30" selected>30s</option>
+                        <option value="45">45s</option>
+                        <option value="60">60s</option>
+                        <option value="90">90s</option>
+                        <option value="120">2min</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vocabulary Management Modal -->
+    <div id="vocabulary-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage <span id="vocabulary-game-title"></span> Vocabularies</h2>
+                <span class="close" onclick="closeModal('vocabulary-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="vocabulary-list-container">
+                    <div class="vocabulary-controls">
+                        <button onclick="showAddVocabularyForm()" class="add-vocab-btn">+ Add New Vocabulary</button>
+                    </div>
+                    <div id="vocabulary-list"></div>
+                </div>
+                
+                <div id="add-vocabulary-form" style="display: none;">
+                    <h3>Add New Vocabulary</h3>
+                    
+                    <div class="form-field" id="word-field">
+                        <label>Word:</label>
+                        <input type="text" id="vocab-word" placeholder="Enter the word">
+                    </div>
+                    
+                    <div class="form-field" id="definition-field">
+                        <label>Definition:</label>
+                        <textarea id="vocab-definition" placeholder="Enter the definition"></textarea>
+                    </div>
+                    
+                    <div class="form-field" id="sentence-field">
+                        <label>Sentence (use ___ for blank):</label>
+                        <textarea id="vocab-sentence" placeholder="The cat sat on the ___."></textarea>
+                    </div>
+                    
+                    <div class="form-field" id="phrase-field">
+                        <label>Phrase (use ___ for blank):</label>
+                        <input type="text" id="vocab-phrase" placeholder="Break the ___">
+                    </div>
+                    
+                    <div class="form-field" id="question-field">
+                        <label>Question:</label>
+                        <textarea id="vocab-question" placeholder="Enter the formation question"></textarea>
+                    </div>
+                    
+                    <div class="form-field" id="base-field">
+                        <label>Base Word:</label>
+                        <input type="text" id="vocab-base" placeholder="happy">
+                    </div>
+                    
+                    <div class="form-field" id="suffix-field">
+                        <label>Suffix/Prefix:</label>
+                        <input type="text" id="vocab-suffix" placeholder="ness">
+                    </div>
+                    
+                    <div class="form-field" id="answer-field">
+                        <label>Answer:</label>
+                        <input type="text" id="vocab-answer" placeholder="happiness">
+                    </div>
+                    
+                    <div class="form-field" id="options-field">
+                        <label id="options-label">Options (comma-separated):</label>
+                        <input type="text" id="vocab-options" placeholder="option1, option2, option3, option4">
+                    </div>
+                    
+                    <div class="form-field" id="correct-field">
+                        <label>Correct Answer:</label>
+                        <input type="text" id="vocab-correct" placeholder="Enter the correct answer">
+                    </div>
+                    
+                    <div class="form-field" id="hint-field">
+                        <label>Hint (optional):</label>
+                        <input type="text" id="vocab-hint" placeholder="Enter a helpful hint">
+                    </div>
+                    
+                    <div class="form-field" id="meaning-field">
+                        <label>Meaning:</label>
+                        <textarea id="vocab-meaning" placeholder="Explain what this phrase means"></textarea>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button onclick="saveVocabulary()" class="save-btn">Save</button>
+                        <button onclick="cancelAddVocabulary()" class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
